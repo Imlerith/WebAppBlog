@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='profile_pics/favicon.jpg') }}" />
+
+    <!-- <link rel="stylesheet" type="text/css" href="../static/main.css">
+    <link rel="stylesheet" type="text/css" href="../static/style2.css"> -->
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-208616492-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-208616492-1');
+    </script>
+
+    {% if title %}
+    <title>Quant Analytics Blog - {{ title }}</title>
+    {% else %}
+    <title>Quant Analytics Blog</title>
+    {% endif %}
+</head>
+
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div class="sidebar" id="sidebar">
+        <ul class="list-unstyled components">
+            <p>&nbsp</p>
+            <li>
+                <a href="{{ url_for('sidebar.crypto_sentiment') }}">Crypto Sentiment</a>
+            </li>
+            <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                    class="dropdown-toggle">RoboAdvisor</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="{{ url_for('sidebar.roboadvisor_fundamental') }}">Fundamental</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('sidebar.roboadvisor_technical') }}">Technical</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="{{ url_for('sidebar.forecasts') }}">Forecasts</a>
+            </li>
+            <li>
+                <a href="{{ url_for('sidebar.contact') }}">Contact</a>
+            </li>
+        </ul>
+        <!-- <div id="dismiss">
+            <i class="fas fa-arrow-left"></i>
+        </div> -->
+    </div>
+
+    <!-- Main content -->
+    <!-- "flex-fill" is important for the footer to stick to the bottom -->
+    <main role="main" class="container flex-fill">
+        <header class="site-header">
+            <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Menu</span>
+                </button>
+                <div class="container">
+
+                    <a class="navbar-brand mr-4" href="/">Quant Analytics Blog</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                        aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarToggle">
+                        <div class="navbar-nav mr-auto">
+                            <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
+                            <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
+                        </div>
+                        <!-- Navbar Right Side -->
+                        <ul class="navbar-nav">
+                            {% if current_user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Account</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">New Post</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url_for('posts.new_post') }}">New Post</a>
+                                    <a class="dropdown-item" href="{{ url_for('users.upload') }}">Upload</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        <div class="row">
+                            <form class="navbar-form navbar-right" method="get" action="{{ url_for('main.search') }}">
+                                <div class="col-12 align-self-center mb-3 mb-md-0 ml-md-3">
+                                    {{ g.search_form.q(size=20, class='form-control',
+                                    placeholder=g.search_form.q.label.text) }}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- nav>ul>li*5>a[href=www.$.com]{Click Me} -->
+        <div class="row justify-content-md-center">
+            <div class="col-md-10">
+                <!-- A "with" block to allow flashed messages to be shown on any page -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+                <!-- This block gets overwritten in child templates -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer footer id="sticky-footer" class="flex-shrink-0 py-4 bg-light text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2021 Copyright:
+            <a class="text-dark" href="/home">Quant Analytics Blog</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+
+    <div class="overlay"></div>
+
+    <!-- Navigation Bar -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                // hide sidebar
+                $('#sidebar').removeClass('active');
+                // hide overlay
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                // toggle sidebar
+                $('#sidebar').toggleClass('active');
+                // fade in the overlay
+                $('.overlay').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>

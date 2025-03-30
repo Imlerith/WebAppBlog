@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">
+                {{ legend }}
+                <p>
+                <ul>
+                    <li style="font-size:16px"><a href="https://www.markdownguide.org/basic-syntax/" style="color: blue; 
+                        text-decoration: underline; text-decoration-style: dotted;">markdown</a> syntax can be used
+                        in posts</li>
+                    <li style="font-size:16px">if you want to insert pictures into your posts, please first upload them
+                        <a href="{{ url_for('users.upload') }}" style="color: blue; 
+                text-decoration: underline; text-decoration-style: dotted;">here</a>
+                    </li>
+                    <li style="font-size:16px">uploaded images can be referenced as: <br>
+                        "https://www.quant-analytics.net/static/uploads/&lt;username&gt;/&lt;imagename&gt;"
+                    </li>
+                    <li style="font-size:16px">please do not use copyrighted, illegal or obscene content in your posts
+                    </li>
+                </ul>
+                </p>
+            </legend>
+
+            <div class="form-group">
+                {{ form.title.label(class="form-control-label") }}
+                {% if form.title.errors %}
+                {{ form.title(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.title.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.title(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.content.label(class="form-control-label") }}
+                {% if form.content.errors %}
+                {{ form.content(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.content.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.content(class="form-control form-control-lg", rows="10") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}

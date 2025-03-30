@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+
+<h1>File Upload</h1>
+<p>Upload here files to link them in posts. Please first see the instructions <a href="{{ url_for('posts.new_post') }}"
+        style="color: blue; 
+    text-decoration: underline; text-decoration-style: dotted;">here</a>
+<ul>
+    <li>allowed extensions: .jpg, .png, .gif</li>
+    <li>maximum allowed size: 1MB</li>
+</ul>
+</p>
+<form action="{{ url_for('users.upload_files') }}" class="dropzone">
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+{% endblock %}

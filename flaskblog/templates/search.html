@@ -1,0 +1,37 @@
+{% extends "layout_flex.html" %}
+{% block content %}
+<h1>{{ 'Search results:' }}</h1>
+{% for post in posts %}
+{% if post.approved %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static',
+            filename='profile_pics/' + post.author.image_file) }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            <!-- In url_for(), set the parameter which the function user_posts()
+                        (or any other function passed into url_for()) takes, to a desired value -->
+            <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{
+                post.author.username }}</a>
+            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+        </div>
+        <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
+        <p class="article-content">{{ post.html_content }}</p>
+    </div>
+</article>
+{% endif %}
+{% endfor %}
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link{% if not prev_url %} disabled{% endif %}" href="{{ prev_url or '#' }}">
+                Previous results
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link{% if not next_url %} disabled{% endif %}" href="{{ next_url or '#' }}">
+                Next results
+            </a>
+        </li>
+    </ul>
+</nav>
+{% endblock content %}
